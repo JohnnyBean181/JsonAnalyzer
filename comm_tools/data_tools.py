@@ -48,7 +48,7 @@ def transform_data(json_data):
 
     for i, data in enumerate(json_data):
         news_dict = dict()
-        news_dict['Id'] = data.get('Id', None)
+        news_dict['Id_txt'] = data.get('Id', None)
         news_dict['Author_Name'] = data.get('Author').get('DisplayName', None)
         news_dict['Author_Id'] = data.get('Author').get('Id', None)
         news_dict['Author_Type'] = data.get('Author').get('Type', None)
@@ -92,59 +92,62 @@ def upload_data_plus(data_df, key_words_list, classname):
         # 将 DataFrame 写入 MySQL
         for index, row in data_df.iterrows():
             # print(f"Index: {index}, Data: {row}")
-            data = classname(row)
-            session.add(data)
             try:
-                # verify whether the opinion is already in database.
-                session.commit()
+                data = session.query(classname).filter_by(
+                    Id_txt=row['Id_txt']).first()
+                # If this opinion is not saved before.
+                if data is None:
+                    log_progress(f"creating opinion {row['Id_txt']}")
+                    data = classname(row)
+                    session.add(data)
+                    session.commit()
+                    log_progress(f"opinion created")
+                else: # Otherwise.
+                    log_progress(f"opinion {row['Id_txt']} saved before, "
+                                 f"move on to next opinion")
+                    continue
             except Exception as e:
-                # if exists, load this opinion.
-                if "Duplicate" in str(e):
-                    log_progress(f"load opinion {row['Id']} due to duplicate entry")
-                    session.rollback()
-                    data = session.query(classname).filter_by(
-                        Id=row['Id']).first()
-                    if data is None:
-                        print(f"get opinion error: {row['Id']}")
-                else:
-                    log_progress(str(e))
+                # record error
+                log_progress(str(e))
 
             # if there is no keywords, go to next opinion
             if len(key_words_list[index]) == 0:
+                log_progress(f"no keywords found, move on to next opinion")
                 continue
 
             for key_word in key_words_list[index]:
-                keyword = Keywords(key_name=key_word)
-                session.add(keyword)
                 try:
-                    # verify whether the keyword is already in database.
-                    session.commit()
+                    keyword = session.query(Keywords).filter_by(
+                        key_name=key_word).first()
+                    # If this keyword is not saved before.
+                    if keyword is None:
+                        log_progress(f"creating keyword {key_word}")
+                        keyword = Keywords(key_name=key_word)
+                        session.add(keyword)
+                        session.commit()
+                        log_progress(f"keyword created")
+                    else:  # Otherwise.
+                        log_progress(f"keyword {key_word} loaded from Mysql")
                 except Exception as e:
-                    # if exists, pick up this keyword from the database.
-                    if "Duplicate" in str(e):
-                        log_progress(f"load keyword {key_word} due to duplication")
-                        session.rollback()
-                        keyword = session.query(Keywords).filter_by(key_name=key_word).first()
-                    else:
-                        log_progress(str(e))
+                    # record error
+                    log_progress(str(e))
 
-                # 现在可以创建关联
-                association = KeywordsAssociation(
-                    keyword=keyword,  # 使用已经存在于session中或数据库中的Keyword实例
-                    data=data # 使用已经存在于session中的WebData实例
-                )
-
-                session.add(association)
                 try:
-                    session.commit()
+                    association = session.query(KeywordsAssociation).filter_by(
+                        keyword_id=keyword.Id, data_id=data.Id).first()
+                    # If this association is not saved before.
+                    if association is None:
+                        log_progress(f"creating association between keyword ID: "
+                              f"{keyword.Id} and data ID: {data.Id}")
+                        association = KeywordsAssociation(
+                            keyword=keyword,  # 使用已经存在于session中或数据库中的Keyword实例
+                            data=data  # 使用已经存在于session中的WebData实例
+                        )
+                        session.add(association)
+                        session.commit()
+                        log_progress(f"association created")
+                    else:  # Otherwise.
+                        log_progress(f"skip this association due to duplication")
                 except Exception as e:
-                    if "Duplicate" in str(e):
-                        log_progress("Skip association due to duplicate entry")
-                        session.rollback()
-                    else:
-                        log_progress(str(e))
-
-
-
-
-
+                    # record error
+                    log_progress(str(e))

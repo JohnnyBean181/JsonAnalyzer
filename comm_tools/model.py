@@ -27,7 +27,8 @@ class Keywords(Base):
 class CombinedData(Base):
     __tablename__ = 'CombinedData'
 
-    Id = Column(String(100), primary_key=True)
+    Id = Column(Integer, primary_key=True, autoincrement=True)
+    Id_txt = Column(String(100), nullable=False, unique=True)
     Author_Name = Column(String(100), nullable=False)
     Author_Id = Column(String(100), nullable=True)
     Author_Type = Column(String(50), nullable=True)
@@ -50,7 +51,7 @@ class CombinedData(Base):
 
     def __init__(self, row):
         # 直接从row字典中提取值
-        self.Id = row.get('Id')
+        self.Id_txt = row.get('Id_txt')
         self.Author_Name = row.get('Author_Name')
         self.Author_Id = row.get('Author_Id')
         self.Author_Type = row.get('Author_Type')
@@ -72,7 +73,7 @@ class KeywordsAssociation(Base):
 
     Id = Column(Integer, primary_key=True, autoincrement=True)
     keyword_id = Column(Integer, ForeignKey('Keywords.Id'), nullable=False)
-    data_id = Column(String(100), ForeignKey('CombinedData.Id'), nullable=True)
+    data_id = Column(Integer, ForeignKey('CombinedData.Id'), nullable=False)
 
     # 添加约束条件
     __table_args__ = (UniqueConstraint('keyword_id', 'data_id', name='association_UNIQUE'),)
