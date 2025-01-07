@@ -38,11 +38,11 @@ class CombinedData(Base):
     Title = Column(String(200), nullable=True)
     ReadCount = Column(Integer, nullable=True)
     LikeCount = Column(Integer, nullable=True)
-    Url = Column(String(200), nullable=True)
+    Url = Column(String(500), nullable=True)
     Date = Column(Date, nullable=False)
     CommentCount = Column(Integer, nullable=True)
     ForwardCount = Column(Integer, nullable=True)
-    Text = Column(String(500), nullable=True)
+    Text = Column(String(2000), nullable=True)
 
     # 关联关系
     data_assoc = relationship("KeywordsAssociation",

@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="35d89659-e18f-4188-ac3e-bf76f8cf8119" name="Changes" comment="[dev] combine data from web, weibo, and wechat into one Class.">
+    <list default="true" id="35d89659-e18f-4188-ac3e-bf76f8cf8119" name="Changes" comment="[dev] optimize CombinedData structure, use Id as primary key.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/comm_tools/data_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/comm_tools/data_tools.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/comm_tools/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/comm_tools/model.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -121,7 +120,9 @@
       <updated>1735825757414</updated>
       <workItem from="1735825758446" duration="8347000" />
       <workItem from="1735906220811" duration="54578000" />
-      <workItem from="1736059156150" duration="4032000" />
+      <workItem from="1736059156150" duration="4087000" />
+      <workItem from="1736125037025" duration="1710000" />
+      <workItem from="1736239539559" duration="144000" />
     </task>
     <task id="LOCAL-00001" summary="initialization">
       <option name="closed" value="true" />
@@ -155,7 +156,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736048092191</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="[dev] optimize CombinedData structure, use Id as primary key.">
+      <option name="closed" value="true" />
+      <created>1736066123143</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1736066123143</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -166,7 +175,8 @@
     <MESSAGE value="[dev] add json file" />
     <MESSAGE value="[dev] upload web data and weibo data" />
     <MESSAGE value="[dev] combine data from web, weibo, and wechat into one Class." />
-    <option name="LAST_COMMIT_MESSAGE" value="[dev] combine data from web, weibo, and wechat into one Class." />
+    <MESSAGE value="[dev] optimize CombinedData structure, use Id as primary key." />
+    <option name="LAST_COMMIT_MESSAGE" value="[dev] optimize CombinedData structure, use Id as primary key." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/JsonAnalyzer$data_retriever.coverage" NAME="data_retriever Coverage Results" MODIFIED="1735910158765" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/comm_tools" />
